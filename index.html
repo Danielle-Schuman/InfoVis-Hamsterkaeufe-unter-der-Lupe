@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- distributed stylesheets for a clear arrangement -->
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="spider-style.css" />
+        <link rel="stylesheet" type="text/css" href="bubble-style.css" />
+        <link rel="stylesheet" type="text/css" href="filter-style.css" />
+        <!-- for material icons use -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <title>IV - Hamsterkäufe unter der Lupe - Gruppe 4</title>
+	    <meta charset="UTF-8">
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="header">
+            <div id="title-container">
+                <!--<h1>Hamsterkäufe unter der Lupe</h1>-->
+                <img src="hamsterkauf.svg" />
+            </div>
+            <div id="creators-container">
+                <p>Gruppe 4 - Daniëlle Schuman, Anahita Marashi, Elizabeth Bouquet, Alexandra Ginger</p>
+            </div>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div id="bubble-wrapper">
+                    <div id="bubble-chart">
+                        <!-- bubble chart will be drawn here :) -->
+                        <iframe id="bubblechartframe" src="anna/BubbleChart.html"  frameborder="0"></iframe>
+                    </div>
+                </div>
+                <div id="slider-wrapper">
+                    <div id="slider-toolbar">
+                        <!-- insert slider toggle and play button here :) -->
+                        <button id="play-button" onclick="onPlayButtonClicked(this)">Play</button>
+                        <img src="sliderAsScreenshot.PNG" />
+                        <!-- insert filter toggle here :) -->
+                        <label class="toggle-label">
+                            <div id="slider-toggle" class="toggle">
+                                <input class="toggle-state" type="checkbox" name="check" value="check" />
+                                <div class="toggle-indicator"></div>
+                            </div>
+                            <div class="toggle-label-text">Verlauf anzeigen</div>
+                        </label>
+                    </div>
+                    <div id="slider">
+                    <!-- slider here :) -->
+                        <!--<div class="col-sm-2"><p id="slider-step-value"></p></div>-->
+                        <!--<div class="col-sm"><div id="slider-step"></div></div>-->
+                    </div>
+                </div>
+            </div>
+            <div id="right-container">
+                <div id="spider-title">
+                    <h3>Konsum von ausgewählten Produkten</h3>
+                </div>
+                <div id="spider-container">
+                    <div id="spider-wrapper">
+                        <div id="spider-chart">
+                            <!-- spider chart will be drawn here :) -->
+                        </div>
+                        <!-- the following structure is our placeholder for the spider chart -->
+                        <div id="placeholder">
+                            <div id="icon">
+                                <i class="material-icons">info_outline</i>
+                            </div>
+                            <p>Wählen Sie einen Datenpunkt aus,
+                                um mehr Details zu erfahren.</p>
+                        </div>
+                        <!-- placeholder end -->
+                    </div>
+                    <div id="spider-info">
+                        <i class="material-icons">info_outline</i>
+                        <p>
+                            Durchschnittlicher Inzidenzwert des ausgewählten Zeitraums: 
+                        </p>
+                        <p>X</p>
+                    </div>
+                </div>
+                <div id="filter-container">
+                    <div id="filter-header">
+                        <!-- insert filter toggle here :) -->
+                        <label class="toggle-label">
+                            <div id="filter-toggle" class="toggle">
+                                <input class="toggle-state" type="checkbox" name="check" value="check" />
+                                <div class="toggle-indicator"></div>
+                            </div>
+                            <div class="toggle-label-text">Filter</div>
+                        </label>
+                    </div>
+                    <div id="filter-wrapper">
+                        <!--checkboxes here :) -->
+                        <div id="filter-deutschland" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-deutschland" name="deutschland">
+                            <label for="deutschland">Deutschland</label>
+                        </div>
+                        <div id="filter-china" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-china" name="china">
+                            <label for="china">China</label>
+                        </div>
+                        <div id="filter-usa" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-usa" name="usa">
+                            <label for="usa">USA</label>
+                        </div>
+                        <div id="filter-österreich" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-österreich" name="österreich">
+                            <label for="österreich">Österreich</label>
+                        </div>
+                        <div id="filter-brasilien" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-brasilien" name="brasilien">
+                            <label for="brasilien">Brasilien</label>
+                        </div>
+                        <div id="filter-australien" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-australien" name="australien">
+                            <label for="australien">Australien</label>
+                        </div>
+                        <div id="filter-italien" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-italien" name="italien">
+                            <label for="italien">Italien</label>
+                        </div>
+                        <div id="filter-südafrika" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-südafrika" name="südafrika">
+                            <label for="südafrika">Südafrika</label>
+                        </div>
+                        <div id="filter-russland" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-russland" name="russland">
+                            <label for="russland">Russland</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- distributed logic for the charts and the main interaction functionality -->
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <!--<script src="slider.js"></script>-->
+    <script src="spiderchart.js"></script>
+    <script src="bubblechart.js"></script>
+    <script src="main.js"></script>
+</html>

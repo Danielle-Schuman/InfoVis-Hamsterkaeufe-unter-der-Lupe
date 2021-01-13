@@ -1,0 +1,66 @@
+#filter-wrapper {
+    margin-top: 5px;
+    flex: 4;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.filter {
+    width: 33.3%;
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    padding: 5px;
+    flex-grow: 1;
+    font-size: 1.2rem;
+}
+
+.filter input {
+    display: none;
+}
+
+.filter input + label {
+    color: var(--text-gray);
+    font-weight: normal;
+    line-height: 2.4rem;
+}
+
+.filter input + label::before {
+    width: 2.4rem;
+    height: 2.4rem;
+    background-image: url("checkbox/unchecked.svg");
+    display: block;
+    content: "";
+    float: left;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.filter:hover input + label {
+    color: var(--text-black);
+    font-weight: 200;
+    cursor: pointer;
+}
+
+.filter:hover input + label::before {
+    background-image: url("checkbox/unchecked-hover.svg");
+}
+
+.filter input:checked + label {
+    color: var(--text-gray);
+    font-weight: bold;
+}
+
+.filter input:checked + label::before {
+    background-image: url("checkbox/checked.svg");
+}
+
+.filter:hover input:checked + label {
+    color: var(--text-black);
+    font-weight: bold;
+}
+
+.filter:hover input:checked + label::before {
+    background-image: url("checkbox/checked-hover.svg");
+}

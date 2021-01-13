@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prototype</title>
+    <style>
+        body {
+            background-color: #eeeeee
+        }
+
+        /*Axis*/
+        .axisGray line{
+            stroke: #777777;
+        }
+
+        .axisGray path{
+            stroke: #777777;
+        }
+
+        .axisGray text{
+            fill: #777777;
+        }
+
+        /*BUBBLES*/
+
+        .bubbles {
+            stroke-width: 2px;
+            stroke: white;
+        }
+        .bubbles:hover {
+            stroke: black;
+        }
+
+        .axis-grid line {
+            stroke: gray;
+            stroke-dasharray: 5,5;
+        }
+
+
+
+    </style>
+
+</head>
+<body>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
+
+<div id="my_prototype"></div>
+
+
+<script>
+    var margin = {top: 10, right: 20, bottom: 70, left: 70},
+        width = 1200 - margin.left - margin.right,
+        height = 600 - margin.top - margin.bottom;
+        innerwidth = width - margin.left -margin.right;
+        innerheight = height - margin.top + 10;
+
+    var svg = d3.select("#my_prototype")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    //Hintergrund
+    var background= svg.append("rect")
+        .attr("id","backgroundRect")
+        .attr("width","92.4%")
+        .attr("height","86.9%")
+        .attr("x",0)
+        .attr("y",0)
+        .attr("fill","#FFFFFF")
+
+
+
+    // Daten
+    var data = [{x:20, y:700, z: 10, c: "Deutschland"}, {x:90, y:350, z: 10, c: "Italien"}, {x:52, y:140, z: 10, c: "USA"},
+        {x:50, y:535, z: 10,  c: "China"}, {x:80, y:835, z: 10,  c: "Australien"}, {x:90, y:635, z: 10,  c: "Österreich"}, {x:20, y:435, z: 10,  c: "Russland"},
+        {x:15, y:335, z: 10,  c: "Südafrika"}, {x:150, y:125, z: 10,  c: "Brasilien"}];
+
+    // x-Achse
+    var x = d3.scaleLinear()
+        .domain([0, 220])
+        .range([ 0, width ]);
+    svg.append("g")
+        .attr("transform", "translate(0," + height + ")") //Axe unten
+        .attr("class", "axisGray")
+        .call(d3.axisBottom(x));
+
+    // x-Achse Label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("x", width - 500)
+        .attr("y", height + margin.top + 40)
+        .attr("font-weight", "bold")
+        .attr("font-size", "12px")
+        .attr("fill", "gray")
+        .attr("font-family", "sans-serif")
+        .text("7-Tage-Inzidenz-Wert");
+
+    // y-Achse
+    var y = d3.scaleLinear()
+        .domain([0, 1000])
+        .range([ height, 0]);
+    svg.append("g")
+        .attr("class", "axisGray")
+        .call(d3.axisLeft(y));
+
+    // y-Achse Label:
+    svg.append("text")
+        .attr("text-anchor", "end")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -margin.left+20)
+        .attr("x", -margin.top-160)
+        .attr("font-weight", "bold")
+        .attr("font-size", "12px")
+        .attr("fill", "gray")
+        .attr("font-family", "sans-serif")
+        .text("Konsum (pro Kopf)")
+
+      
+    //Grid
+    var xAxisGrid = d3.axisBottom(x)
+        .tickSize(-innerheight)
+        .tickFormat('')
+        .ticks(10);
+
+    svg.append('g')
+        .attr('class', 'x axis-grid')
+        .attr('transform', 'translate(0,' + innerheight + ')')
+        .call(xAxisGrid);
+
+
+    //Bubble-Göße
+    var z = d3.scaleLinear()
+        .domain([0, 50])
+        .range([ 0, 60]);
+
+    let countries = ["deutschland", "china", "usa", "österreich", "brasilien", "australien", "italien", "südafrika", "russland"];
+    let colors = ['#88CCEE', '#44AA99', '#117733', '#332288', '#DDCC77', '#999933', '#CC6677', '#882255', '#AA4499'];
+    // Bubble-Farben und Eigenschaft
+    var c= d3.scaleOrdinal()
+        .domain(countries)
+        .range(colors);
+
+
+    //Hover Funktion, um Name des Landes sehen zu können
+    var tooltip = d3.select("#my_prototype")
+        .append("div")
+        .style("opacity", 0)
+        .attr("class", "tooltip")
+        .style("background-color", "black")
+        .style("border-radius", "5px")
+        .style("padding", "10px")
+        .style("color", "white")
+
+    var showTooltip = function(d) {
+        tooltip
+            .transition()
+            .duration(50)
+        tooltip
+            .style("opacity", 1)
+            .html("Country: " + d.c)
+            .style("position", "absolute")
+            .style("left", (d3.mouse(this)[0]+30) + "px")
+            .style("top", (d3.mouse(this)[1]+30) + "px")
+    }
+    var moveTooltip = function(d) {
+        tooltip
+            .style("position", "absolute")
+            .style("left", (d3.mouse(this)[0]+30) + "px")
+            .style("top", (d3.mouse(this)[1]+30) + "px")
+    }
+    var hideTooltip = function(d) {
+        tooltip
+            .transition()
+            .duration(50)
+            .style("opacity", 0)
+    }
+
+
+    svg.append('g')
+        .selectAll("dot")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", function (d) { return x(d.x); } )
+        .attr("cy", function (d) { return y(d.y); } )
+        .attr("r", function (d) { return z(d.z); } )
+        .style("fill", function (d) { return c(d.c); } )
+        .style("opacity", "0.7")
+        .attr("stroke", "white")
+        .style("stroke-width", "2px")
+        .on("mouseover", showTooltip )
+        .on("mousemove", moveTooltip )
+        .on("mouseleave", hideTooltip )
+
+
+</script>
+
+</body>
+</html>
