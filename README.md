@@ -1,2 +1,2 @@
-# InfoVis-Group4
-TO-DO
+# InfoVis-Group 4
+Repository for hosting our website "Hamsterkäufe unter der Lupe"
