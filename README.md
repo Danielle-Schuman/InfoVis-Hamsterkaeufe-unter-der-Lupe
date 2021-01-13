@@ -19,7 +19,7 @@ The application will then be available here:
 ```
 http://localhost:8080
 ```
-### Or simply open: https://danielle-schuman.github.io/InfoVis-Hamsterkaeufe-unter-der-Lupe/ !
+### Or simply open: https://danielle-schuman.github.io/InfoVis-Hamsterkaeufe-unter-der-Lupe/ in Google Chrome Browser!
 
 ## MVP is currently only 100% correctly working on Google Chrome!
 Bugs in Firefox will be fixed soon...
