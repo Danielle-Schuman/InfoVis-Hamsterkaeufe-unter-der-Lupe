@@ -13,7 +13,12 @@
     overflow: hidden;
     padding: 5px;
     flex-grow: 1;
-    font-size: 1.2rem;
+    font-size: 1rem;
+}
+
+/* no data for italy --> filter hidden */
+#filter-italien {
+    visibility: hidden;
 }
 
 .filter input {

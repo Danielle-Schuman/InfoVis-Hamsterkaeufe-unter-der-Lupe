@@ -15,6 +15,7 @@
 
         .axisGray path{
             stroke: #777777;
+            
         }
 
         .axisGray text{
@@ -75,9 +76,16 @@
 
 
     // Daten
+    /*
     var data = [{x:20, y:700, z: 10, c: "Deutschland"}, {x:90, y:350, z: 10, c: "Italien"}, {x:52, y:140, z: 10, c: "USA"},
         {x:50, y:535, z: 10,  c: "China"}, {x:80, y:835, z: 10,  c: "Australien"}, {x:90, y:635, z: 10,  c: "Österreich"}, {x:20, y:435, z: 10,  c: "Russland"},
         {x:15, y:335, z: 10,  c: "Südafrika"}, {x:150, y:125, z: 10,  c: "Brasilien"}];
+    */
+
+    let data = [{x:10, y:100}, {x:15, y:300}, {x:35, y:540}, {x:50, y:260}, {x:76, y:410}, {x:99, y:670},
+                {x:120, y:710}, {x:130, y:840}, {x:144, y:700}, {x:180, y:970}, {x:210, y:810}];
+
+    
 
     // x-Achse
     var x = d3.scaleLinear()
@@ -133,16 +141,21 @@
 
 
     //Bubble-Göße
+    /*
     var z = d3.scaleLinear()
         .domain([0, 50])
         .range([ 0, 60]);
-
+    
     let countries = ["deutschland", "china", "usa", "österreich", "brasilien", "australien", "italien", "südafrika", "russland"];
     let colors = ['#88CCEE', '#44AA99', '#117733', '#332288', '#DDCC77', '#999933', '#CC6677', '#882255', '#AA4499'];
+    
     // Bubble-Farben und Eigenschaft
     var c= d3.scaleOrdinal()
         .domain(countries)
         .range(colors);
+    */
+    
+
 
 
     //Hover Funktion, um Name des Landes sehen zu können
@@ -161,7 +174,7 @@
             .duration(50)
         tooltip
             .style("opacity", 1)
-            .html("Country: " + d.c)
+            .html("Inzidenzwert: " + d.x + "<br />" + "Konsumwert: " + d.y)
             .style("position", "absolute")
             .style("left", (d3.mouse(this)[0]+30) + "px")
             .style("top", (d3.mouse(this)[1]+30) + "px")
@@ -179,6 +192,26 @@
             .style("opacity", 0)
     }
 
+  
+    svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", "black")
+        .attr("stroke-width", 1.5)
+        .attr("d", d3.line()
+            .x(function(d){ return x(d.x)})
+            .y(function(d){ return y(d.y)})
+        )
+
+    svg.append("text")
+    .attr("transform", "translate(" + (width-45) + "," + y(data[data.length-1].y) + ")")
+    .attr("dy", ".35em")
+    .attr("class","legend")
+    .attr("text-anchor", "start")
+    .style("fill", "black")
+    .style("font-size",45)
+    .text("Italy");
+
 
     svg.append('g')
         .selectAll("dot")
@@ -187,14 +220,21 @@
         .append("circle")
         .attr("cx", function (d) { return x(d.x); } )
         .attr("cy", function (d) { return y(d.y); } )
-        .attr("r", function (d) { return z(d.z); } )
-        .style("fill", function (d) { return c(d.c); } )
-        .style("opacity", "0.7")
+        .attr("r", 10)
+        //.style("fill", function (d) { return c(d.c); } )
+        .style("fill", "black")
+        //.style("opacity", "0.7")
         .attr("stroke", "white")
         .style("stroke-width", "2px")
         .on("mouseover", showTooltip )
         .on("mousemove", moveTooltip )
         .on("mouseleave", hideTooltip )
+
+
+        
+        
+    
+
 
 
 </script>

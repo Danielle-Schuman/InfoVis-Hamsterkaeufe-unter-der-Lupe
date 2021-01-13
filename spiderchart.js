@@ -1,7 +1,5 @@
 let data = []; // dummy data
-let features = ["Desinfektionsmittel","Hefe","Mehl","Toilettenpapier","Bier","Seife"];
-let countries = ["deutschland", "china", "usa", "österreich", "brasilien", "australien", "italien", "südafrika", "russland"];
-let colors = ['#88CCEE', '#44AA99', '#117733', '#332288', '#DDCC77', '#999933', '#CC6677', '#882255', '#AA4499'];
+let features = ["Desinfektionsmittel","Handcreme","Nudeln","Toilettenpapier","Bier","Flüssigseife"];
 let svg_size = window.innerHeight/2;
 let radialScale = d3.scaleLinear()
 	.domain([0,10])
@@ -68,14 +66,18 @@ let paths = []
 
 for (var i = 0; i < data.length; i ++){
     let d = data[i];
-    let color = colors[i];
+    //let color = colors[i];
     let coordinates = getPathCoordinates(d);
     coordinates.push(coordinates[0]);
+
+    // get color from COLORSCHEME
+    let country = countries[i];
+    let color = getColorForCountry(country);
 
     //draw the path element
     let path = svg.append("path")
     .datum(coordinates)
-    .attr("id", countries[i])
+    .attr("id", country)
     .attr("d",line)
     .attr("stroke-width", 2)
     .attr("stroke", color)

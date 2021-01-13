@@ -1,0 +1,35 @@
+body {
+    background-color: #eeeeee
+}
+
+/*Axis*/
+.axisGray line{
+    stroke: #777777;
+}
+
+.axisGray path{
+    stroke: #777777;
+}
+
+.axis-grid path {
+    display: none;
+}
+
+.axisGray text{
+    fill: #777777;
+}
+
+/*BUBBLES*/
+
+.bubbles {
+    stroke-width: 2px;
+    stroke: white;
+}
+.bubbles:hover {
+    stroke: black;
+}
+
+.axis-grid line {
+    stroke: gray;
+    stroke-dasharray: 5,5;
+}

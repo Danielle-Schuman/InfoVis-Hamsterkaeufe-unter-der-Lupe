@@ -6,11 +6,12 @@
         <link rel="stylesheet" type="text/css" href="spider-style.css" />
         <link rel="stylesheet" type="text/css" href="bubble-style.css" />
         <link rel="stylesheet" type="text/css" href="filter-style.css" />
+        <link rel="stylesheet" type="text/css" href="slider-style.css" />
         <!-- for material icons use -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <title>IV - Hamsterkäufe unter der Lupe - Gruppe 4</title>
 	    <meta charset="UTF-8">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
     </head>
     <body>
         <div id="header">
@@ -20,6 +21,8 @@
             </div>
             <div id="creators-container">
                 <p>Gruppe 4 - Daniëlle Schuman, Anahita Marashi, Elizabeth Bouquet, Alexandra Ginger</p>
+                <p class="data-sources">Quelle für die Inzidenzwerte: https://ourworldindata.org/coronavirus-source-data</p>
+                <p class="data-sources">Quelle für die Konsumwerte: https://www.euromonitor.com/coronavirus</p>
             </div>
         </div>
         <div id="content">
@@ -27,27 +30,52 @@
                 <div id="bubble-wrapper">
                     <div id="bubble-chart">
                         <!-- bubble chart will be drawn here :) -->
-                        <iframe id="bubblechartframe" src="anna/BubbleChart.html"  frameborder="0"></iframe>
+                        <!--iframe id="bubblechartframe" src="anna/BubbleChart.html"  frameborder="0"></iframe-->
+                        
                     </div>
                 </div>
                 <div id="slider-wrapper">
                     <div id="slider-toolbar">
-                        <!-- insert slider toggle and play button here :) -->
-                        <button id="play-button" onclick="onPlayButtonClicked(this)">Play</button>
-                        <img src="sliderAsScreenshot.PNG" />
-                        <!-- insert filter toggle here :) -->
+                        <!-- slider toggle and play button here :) -->
+                        <button id="play-button" onclick="onPlayButtonClicked(this)"> 
+                            <!--<i class="material-icons">play_arrow</i>-->
+                        </button>
+                        <!-- REMOVE <img src="sliderAsScreenshot.PNG" /> REMOVE -->
+                        <!-- filter toggle here :) -->
                         <label class="toggle-label">
                             <div id="slider-toggle" class="toggle">
-                                <input class="toggle-state" type="checkbox" name="check" value="check" />
+                                <input id="slider-toggle-input" class="toggle-state" type="checkbox" name="check" value="check" checked onclick="onSliderToggleClicked(this)"/>
                                 <div class="toggle-indicator"></div>
                             </div>
-                            <div class="toggle-label-text">Verlauf anzeigen</div>
+                            <div id="progress-toggle-label" class="toggle-label-text">Verlauf ausblenden</div>
                         </label>
                     </div>
                     <div id="slider">
                     <!-- slider here :) -->
-                        <!--<div class="col-sm-2"><p id="slider-step-value"></p></div>-->
-                        <!--<div class="col-sm"><div id="slider-step"></div></div>-->
+                        <!--<div class="range">
+                            <input id="slider" type="range" min="1" max="48" steps="1" value="0" oninput="onSliderInputChanged(this)">
+                            <div id="slider-progress"></div>
+                        </div>
+                        <ul class="slider-labels">
+                            <li>September<br>2019</li>
+                            <li>Oktober<br>2019</li>
+                            <li>November<br>2019</li>
+
+                            <li>Dezember<br>2019</li>
+                            <li>Januar<br>2020</li>
+                            <li>Februar<br>2020</li>
+
+                            <li>März<br>2020</li>
+                            <li>April<br>2020</li>
+                            <li>Mai<br>2020</li>
+
+                            <li>Juni<br>2020</li>
+                            <li>Juli<br>2020</li>
+                            <li>August<br>2020</li>
+                            <li>September<br>2020</li>
+                        </ul>-->
+                        <div id="value-wrapper"><p id="value-time"></p></div>
+                        <div id="slider-wrapper"><div id="slider-time"></div></div>
                     </div>
                 </div>
             </div>
@@ -65,8 +93,10 @@
                             <div id="icon">
                                 <i class="material-icons">info_outline</i>
                             </div>
-                            <p>Wählen Sie einen Datenpunkt aus,
-                                um mehr Details zu erfahren.</p>
+                            <div id="placeholder-text">
+                                <p>Wählen Sie Länder aus,
+                                    um mehr Details zu erfahren.</p>
+                            </div>
                         </div>
                         <!-- placeholder end -->
                     </div>
@@ -81,13 +111,14 @@
                 <div id="filter-container">
                     <div id="filter-header">
                         <!-- insert filter toggle here :) -->
-                        <label class="toggle-label">
+                        <!--<label class="toggle-label">
                             <div id="filter-toggle" class="toggle">
-                                <input class="toggle-state" type="checkbox" name="check" value="check" />
+                                <input class="toggle-state" type="checkbox" name="check" value="check" onclick="onFilterToggleClicked(this)" />
                                 <div class="toggle-indicator"></div>
                             </div>
-                            <div class="toggle-label-text">Filter</div>
-                        </label>
+                            <div class="toggle-label-text">Filter zurücksetzen</div>
+                        </label>-->
+                        <input id="filter-button" type="button" class="button" value="" onclick="onFilterToggleClicked(this)">
                     </div>
                     <div id="filter-wrapper">
                         <!--checkboxes here :) -->
@@ -115,17 +146,17 @@
                             <input type="checkbox" id="check-australien" name="australien">
                             <label for="australien">Australien</label>
                         </div>
-                        <div id="filter-italien" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
-                            <input type="checkbox" id="check-italien" name="italien">
-                            <label for="italien">Italien</label>
+                        <div id="filter-russland" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-russland" name="russland">
+                            <label for="russland">Russland</label>
                         </div>
                         <div id="filter-südafrika" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
                             <input type="checkbox" id="check-südafrika" name="südafrika">
                             <label for="südafrika">Südafrika</label>
                         </div>
-                        <div id="filter-russland" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
-                            <input type="checkbox" id="check-russland" name="russland">
-                            <label for="russland">Russland</label>
+                        <div id="filter-italien" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-italien" name="italien">
+                            <label for="italien">Italien</label>
                         </div>
                     </div>
                 </div>
@@ -136,8 +167,10 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <!-- distributed logic for the charts and the main interaction functionality -->
     <script src="https://unpkg.com/d3-simple-slider"></script>
-    <!--<script src="slider.js"></script>-->
+    <!-- file for importing data from csv -->
+    <script src="dataImport.js"></script>
     <script src="spiderchart.js"></script>
     <script src="bubblechart.js"></script>
+    <script src="slider.js"></script>
     <script src="main.js"></script>
 </html>
