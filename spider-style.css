@@ -2,3 +2,66 @@
     font-style: italic;
     color: var(--text-black);
 }
+
+/* styling legend */
+#legend {
+    flex: 1;
+    margin: 1rem;
+    min-height: 50px;
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+    flex-wrap: wrap;
+    border: 1px solid var(--text-black);
+    background-color: white;
+    opacity: 0.5;
+}
+
+#legend .legend {
+    height: 50%;
+    flex-grow: 1;
+    background-repeat: no-repeat;
+    background-size: auto 100%;
+    background-position: center;
+    width: 25%;
+}
+
+#legend-deutschland {
+    background-image: url(legend/legend_deutschland.svg);
+    order: 1;
+}
+
+#legend-österreich {
+    background-image: url(legend/legend_österreich.svg);
+    order: 2;
+}
+
+#legend-russland {
+    background-image: url(legend/legend_russland.svg);
+    order: 3;
+}
+
+#legend-china {
+    background-image: url(legend/legend_china.svg);
+    order: 1;
+}
+
+#legend-brasilien {
+    background-image: url(legend/legend_brasilien.svg);
+    order: 2;
+}
+
+#legend-südafrika {
+    background-image: url(legend/legend_südafrika.svg);
+    order: 3;
+}
+
+#legend-usa {
+    background-image: url(legend/legend_usa.svg);
+    order: 1;
+}
+
+#legend-australien {
+    background-image: url(legend/legend_australien.svg);
+    order: 2;
+}

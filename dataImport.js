@@ -1,17 +1,3 @@
-/* importData([function1, function2])
-
-function function1(data){
-    console.log("Test erfolgreich! Daten sind: ");
-    console.log(data);
-}
-
-function function2(data){
-    console.log("Test 2 auch erfolgreich! Daten fuer Scatterplot sind: ");
-    var testResult = prepareDataForScatterplot(data);
-    console.log(testResult);
-}
-*/
-
 /* Function to import data from "Data_Infovis.xlsx - VerbraucherDaten.csv" and "7-Tages-Inzidenz.csv".
 To be called with function or array of functions that take result of dataimport as argument
 e.g.: importProductData([function1, function2])

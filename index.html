@@ -9,6 +9,8 @@
         <link rel="stylesheet" type="text/css" href="slider-style.css" />
         <!-- for material icons use -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+              rel="stylesheet">
         <title>IV - Hamsterkäufe unter der Lupe - Gruppe 4</title>
 	    <meta charset="UTF-8">
         <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
@@ -24,15 +26,38 @@
                 <p class="data-sources">Quelle für die Inzidenzwerte: https://ourworldindata.org/coronavirus-source-data</p>
                 <p class="data-sources">Quelle für die Konsumwerte: https://www.euromonitor.com/coronavirus</p>
             </div>
+            <div id="legend">
+                <div id="legend-deutschland" class="legend"></div>
+                <div id="legend-österreich" class="legend"></div>
+                <div id="legend-russland" class="legend"></div>
+                <div id="legend-china" class="legend"></div>
+                <div id="legend-brasilien" class="legend"></div>
+                <div id="legend-südafrika" class="legend"></div>
+                <div id="legend-usa" class="legend"></div>
+                <div id="legend-australien" class="legend"></div>
+            </div>
         </div>
         <div id="content">
             <div id="left-container">
                 <div id="bubble-wrapper">
-                    <div id="bubble-chart">
-                        <!-- bubble chart will be drawn here :) -->
-                        <!--iframe id="bubblechartframe" src="anna/BubbleChart.html"  frameborder="0"></iframe-->
-                        
+                    <div id="tooltip" class="tooltip" display="none" style="position: absolute; display: none;">
+                        <p id="tooltip-text"></p>
+                        <div id="tooltip-info"><i class="material-icons">info_outline</i><p>Fehlende Werte wurden hier durch Annäherungswerte ergänzt.</p></div>
                     </div>
+                    <div id="bubble-chart">
+                        <div id="zoom-in-overlay">
+                            <i class="material-icons">zoom_in</i>
+                        </div>
+                        <!-- bubble chart will be drawn here :) -->
+                    </div>
+
+                    <div id="zoom-bubble-chart">
+                        <div id="zoom-out-overlay">
+                            <i class="material-icons">zoom_out</i>
+                        </div>
+                        <!-- zoomed bubble chart will be drawn here :) -->
+                    </div>
+
                 </div>
                 <div id="slider-wrapper">
                     <div id="slider-toolbar">
@@ -40,8 +65,14 @@
                         <button id="play-button" onclick="onPlayButtonClicked(this)"> 
                             <!--<i class="material-icons">play_arrow</i>-->
                         </button>
-                        <!-- REMOVE <img src="sliderAsScreenshot.PNG" /> REMOVE -->
                         <!-- filter toggle here :) -->
+                        <label id="zoom-toggle-wrapper" class="toggle-label" onmouseenter="onZoomToggleHover(this,true)" onmousemove="onZoomToggleHover(this,true)" onmouseout="onZoomToggleHover(this,false)">
+                            <div id="zoom-toggle" class="toggle">
+                                <input id="zoom-toggle-input" class="toggle-state" type="checkbox" name="check" value="check" onclick="onZoomToggleClicked(this)"/>
+                                <div class="zoom-toggle-indicator"><i id="zoom-icon" class="material-icons">zoom_in</i></div>
+                            </div>
+                            <div id="zoom-toggle-label" class="toggle-label-text">Ansicht vergrößern</div>
+                        </label>
                         <label class="toggle-label">
                             <div id="slider-toggle" class="toggle">
                                 <input id="slider-toggle-input" class="toggle-state" type="checkbox" name="check" value="check" checked onclick="onSliderToggleClicked(this)"/>
@@ -52,28 +83,6 @@
                     </div>
                     <div id="slider">
                     <!-- slider here :) -->
-                        <!--<div class="range">
-                            <input id="slider" type="range" min="1" max="48" steps="1" value="0" oninput="onSliderInputChanged(this)">
-                            <div id="slider-progress"></div>
-                        </div>
-                        <ul class="slider-labels">
-                            <li>September<br>2019</li>
-                            <li>Oktober<br>2019</li>
-                            <li>November<br>2019</li>
-
-                            <li>Dezember<br>2019</li>
-                            <li>Januar<br>2020</li>
-                            <li>Februar<br>2020</li>
-
-                            <li>März<br>2020</li>
-                            <li>April<br>2020</li>
-                            <li>Mai<br>2020</li>
-
-                            <li>Juni<br>2020</li>
-                            <li>Juli<br>2020</li>
-                            <li>August<br>2020</li>
-                            <li>September<br>2020</li>
-                        </ul>-->
                         <div id="value-wrapper"><p id="value-time"></p></div>
                         <div id="slider-wrapper"><div id="slider-time"></div></div>
                     </div>
@@ -81,7 +90,7 @@
             </div>
             <div id="right-container">
                 <div id="spider-title">
-                    <h3>Konsum von ausgewählten Produkten</h3>
+                    <h3>Nichtverfügbarkeit von ausgewählten Produkten im Online-Handel in %</h3>
                 </div>
                 <div id="spider-container">
                     <div id="spider-wrapper">
@@ -100,13 +109,13 @@
                         </div>
                         <!-- placeholder end -->
                     </div>
-                    <div id="spider-info">
+                    <!--<div id="spider-info">
                         <i class="material-icons">info_outline</i>
                         <p>
                             Durchschnittlicher Inzidenzwert des ausgewählten Zeitraums: 
                         </p>
                         <p>X</p>
-                    </div>
+                    </div>-->
                 </div>
                 <div id="filter-container">
                     <div id="filter-header">
@@ -167,10 +176,14 @@
     <script src="https://d3js.org/d3.v6.min.js"></script>
     <!-- distributed logic for the charts and the main interaction functionality -->
     <script src="https://unpkg.com/d3-simple-slider"></script>
+    <!-- import library code for making colors lighter -->
+    <script src="PJs-master/pSBC.js"></script>
     <!-- file for importing data from csv -->
     <script src="dataImport.js"></script>
+    <!-- visualization files and main -->
     <script src="spiderchart.js"></script>
     <script src="bubblechart.js"></script>
+    <script src="zoomChart.js"></script>
     <script src="slider.js"></script>
     <script src="main.js"></script>
 </html>

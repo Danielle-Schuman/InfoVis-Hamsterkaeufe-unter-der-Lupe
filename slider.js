@@ -1,17 +1,12 @@
 var domain = [new Date(2020, 0, 1), new Date(2021, 0, 3)];
 var weeks = d3.timeWeek.range(domain[0], domain[domain.length-1]);
+var sliderTimeGlobal;
 
 function drawSlider() {
   //var domain = [new Date(2019, 9, 1), new Date(2020, 9, 30)];
   var width = window.innerWidth*0.5;
   //var weeks = d3.timeWeek.range(domain[0], domain[domain.length-1]);
   var greenColor = "#99ed83";
-
-  console.log("weeks: " + weeks.length);
-  weeks.forEach(element => {
-      console.log(element.toString());
-  });
-
 
     var sliderTime = d3
       .sliderBottom()
@@ -31,18 +26,30 @@ function drawSlider() {
         )
       .on('onchange', val => {
         // hier werden die bubbles und verlaufslinien passend zum slider geupdatet - für jedes Land
-        updateBubblesAndLines(val, false, "deutschland");
-        updateBubblesAndLines(val, false, "österreich");
-        updateBubblesAndLines(val, false, "russland");
+        updateBubblesAndLines(val, "deutschland");
+        updateBubblesAndLines(val, "österreich");
+        updateBubblesAndLines(val, "russland");
 
-        updateBubblesAndLines(val, false, "usa");
-        updateBubblesAndLines(val, false, "china");
-        updateBubblesAndLines(val, false, "brasilien");
+        updateBubblesAndLines(val, "usa");
+        updateBubblesAndLines(val, "china");
+        updateBubblesAndLines(val, "brasilien");
 
-        updateBubblesAndLines(val, false, "australien");
-        updateBubblesAndLines(val, false, "südafrika");
+        updateBubblesAndLines(val, "australien");
+        updateBubblesAndLines(val, "südafrika");
+
+        updateZoomBubblesAndLines(val, "deutschland");
+        updateZoomBubblesAndLines(val, "österreich");
+        updateZoomBubblesAndLines(val, "russland");
+
+        updateZoomBubblesAndLines(val, "usa");
+        updateZoomBubblesAndLines(val, "china");
+        updateZoomBubblesAndLines(val, "brasilien");
+
+        updateZoomBubblesAndLines(val, "australien");
+        updateZoomBubblesAndLines(val, "südafrika");
         currentSliderValue = val;
-        //console.log("slidervalue:" + currentSliderValue);
+
+        updateSpiderChart();
       });
 
     /* END OF onchange callback */
@@ -90,7 +97,7 @@ function drawSlider() {
         }
     });
 
-    // der slider nüps :)
+    // der slider nüps :) (also der Punkt, den man draggt)
     var handle = d3.select(".parameter-value");
 
     handle.append("circle")
@@ -112,95 +119,216 @@ function drawSlider() {
 
     d3.select("#slider-time svg g:nth-child(1)")
       .attr("transform", "translate(60,30)");
+
+    sliderTimeGlobal = sliderTime;
       /* end of function drawSlider */
 }
 
-function updateBubblesAndLines(currentSliderValue, toggled, country) {
+// updates Scatterplot (aka Bubblechart) according to slider-value, selection of filters and toggle-position
+function updateBubblesAndLines(currentSliderValue, country) {
   let bubblesOfCountry = d3.selectAll("#bubble-chart svg g g circle." + country);
   let allLinesOfCountry = d3.selectAll('#bubble-chart .verlaufslinie-' + country);
+
   let bubblesVisibleForCountry = 0;
   let toggle = document.getElementById("slider-toggle-input");
+  let selectedWeek = d3.timeSunday.count(d3.timeYear(currentSliderValue), currentSliderValue);
 
-  // bubbles ein oder ausblenden
-  bubblesOfCountry.each(function (_, i) {
-    let currentBubble = d3.select(this);
-    let bubbleTime = currentBubble.datum().time;
-    let sliderTime = currentSliderValue;
-
-    if (bubbleTime.valueOf() <= sliderTime.valueOf()) {
-      currentBubble.style("opacity", 1);
-      bubblesVisibleForCountry++;
-      if (toggled == true) {
-        if (toggle.checked == false && bubbleTime.valueOf() < sliderTime.valueOf()) currentBubble.style("opacity", 0); 
-      }
-    } else {
-      currentBubble.style("opacity", 0);
-    }
-  });
-
-  bubblesOfCountry.each(function (_, i) {
-    let currentBubble = d3.select(this);
-    if (i == bubblesVisibleForCountry - 1) {
-      currentBubble.style("opacity", 1);
-    }
-    // if filtermode active and country not filtered
-    if (checkedFilters > 0 && getFilterConfigForCountry(country) == false) {
-      currentBubble.style("opacity", 0);
-    }
-  });
-
-  // linien ein/ausblenden, je nachdem wie weit die bubbles angezeigt werden
-  allLinesOfCountry.each(function (_, i) {
-    let currentLine = d3.select(this);
-    let lineIndex = i;
-
-    if (lineIndex < bubblesVisibleForCountry - 1) {
-      currentLine.style("opacity", 1);
-      if (toggled == true) {
-        if (toggle.checked == false) currentLine.style("opacity", 0); 
-      }
-    } else {
-      currentLine.style("opacity", 0);
-    }
-
-    // if filtermode active and country not filtered
-    if (checkedFilters > 0 && getFilterConfigForCountry(country) == false) {
-      currentLine.style("opacity", 0);
-    }
-  });
-
-  // raus falls im filter mode
-  if (checkedFilters > 0 && getFilterConfigForCountry(country) == false) {
-    return;
-  }
-
-  console.log("bubbles visible: " + bubblesVisibleForCountry + " for country: " + country);
-  // wenn slider bewegt wird und verlauf ausgeblendet ist
-  if (toggled == false && toggle.checked == false) {
+  // if filtermode active and country not filtered -> country not to be shown
+  if (checkedFilters > 0 && getFilterConfigForCountry(country) === false) {
+    // make bubbles invisible
     bubblesOfCountry.each(function (_, i) {
       let currentBubble = d3.select(this);
+      currentBubble.style("opacity", 0);
+    });
+    // make lines invisible
+    allLinesOfCountry.each(function (_, i) {
+      let currentLine = d3.select(this);
+      currentLine.style("opacity", 0);
+    });
 
-      if (i == bubblesVisibleForCountry - 1) {
+  }else{ // filtermode not active or country not filtered -> show appropriate bubbles & lines
+    // update bubble visibility
+    bubblesOfCountry.each(function (_, i) {
+      let currentBubble = d3.select(this);
+      let bubbleTime = currentBubble.datum().time;
+      let bubbleWeek = d3.timeSunday.count(d3.timeYear(bubbleTime), bubbleTime);
+
+      // is bubble for point in time indicated by slider -> needs flag & is always visible
+      if (bubbleWeek === selectedWeek) {
+        currentBubble.style("fill", "url(#flag-" + country + ")");
+        currentBubble.style("stroke-width", 3);
+        currentBubble.attr("r", 12);
         currentBubble.style("opacity", 1);
+        // if product value can deviate from actual, use pSBC library function to make color 30% lighter
+        currentBubble.style("stroke", function (d) { if(d.canDeviateFromActualValue){ return pSBC(0.3, getColorForCountry(country)); }else{ return getColorForCountry(country); } });
+        // count up number of visible bubbles for lines later
+        bubblesVisibleForCountry++;
+
+      // is before point in time indicated by slider -> is only to be shown when toggle indicates that Verlauf is to be shown
+      } else if(bubbleWeek < selectedWeek){
+        // show if toggle indicates that Verlauf is to be shown
+        if(toggle.checked) {
+          // make bubbles visible and set fill etc.
+          currentBubble.style("opacity", 1);
+          currentBubble.attr("r", 6);
+          currentBubble.style("stroke", "white");
+          currentBubble.style("stroke-width", 1);
+          // if product value can deviate from actual, use pSBC library function to make color 30% lighter
+          currentBubble.style("fill", function (d) {
+            if (d.canDeviateFromActualValue) {
+              return pSBC(0.3, getColorForCountry(country));
+            } else {
+              return getColorForCountry(country);
+            }
+          });
+          // count up number of visible bubbles for lines later
+          bubblesVisibleForCountry++;
+        // if toggle indicates that Verlauf is not to be shown
+        } else{
+          // make bubble invisible
+          currentBubble.style("opacity", 0);
+        }
+
+      // is after point in time indicated by slider -> never visible
       } else {
         currentBubble.style("opacity", 0);
       }
     });
 
-    allLinesOfCountry.each(function (_, i) {
-      d3.select(this).style("opacity", 0);
-    });
-  }
-  
-  // bubble fill aktualisieren --> letzte Bubble kriegt flagge, alle anderen davor farbe
-  bubblesOfCountry.each(function (_, i) {
-    let currentBubble = d3.select(this);
-    if (i == bubblesVisibleForCountry - 1) {
-      currentBubble.style("fill", "url(#flag-" + country + ")");
-      currentBubble.attr("r", 12);
+    // update lines visibility
+    // if toggle indicates that Verlauf is to be shown
+    if(toggle.checked){
+      // make lines before time indicated by slider visible, and the rest invisible
+        allLinesOfCountry.each(function (_, i) {
+          let currentLine = d3.select(this);
+          if(i < bubblesVisibleForCountry - 1) {
+            currentLine.style("opacity", 1);
+          }else{
+            currentLine.style("opacity", 0);
+          }
+        });
+    // if toggle indicates that Verlauf is not to be shown
     } else {
-      currentBubble.style("fill", getColorForCountry(country));
-      currentBubble.attr("r", 6);
+      // make all lines invisible
+      allLinesOfCountry.each(function (_, i) {
+        let currentLine = d3.select(this);
+        currentLine.style("opacity", 0);
+      });
     }
+  }
+}
+
+//update ZoomBubbleChart
+function updateZoomBubblesAndLines(currentSliderValue, country) {
+  let bubblesOfCountry = d3.selectAll("#zoom-bubble-chart svg g g circle." + country);
+  let allLinesOfCountry = d3.selectAll('#zoom-bubble-chart .verlaufslinie-' + country);
+
+  let bubblesVisibleForCountry = 0;
+  let toggle = document.getElementById("slider-toggle-input");
+  let selectedWeek = d3.timeSunday.count(d3.timeYear(currentSliderValue), currentSliderValue);
+
+  // if filtermode active and country not filtered -> country not to be shown
+  if (checkedFilters > 0 && getFilterConfigForCountry(country) === false) {
+    // make bubbles invisible
+    bubblesOfCountry.each(function (_, i) {
+      let currentBubble = d3.select(this);
+      currentBubble.style("opacity", 0);
+    });
+    // make lines invisible
+    allLinesOfCountry.each(function (_, i) {
+      let currentLine = d3.select(this);
+      currentLine.style("opacity", 0);
+    });
+
+  }else{ // filtermode not active or country not filtered -> show appropriate bubbles & lines
+    // update bubble visibility
+    bubblesOfCountry.each(function (_, i) {
+      let currentBubble = d3.select(this);
+      let bubbleTime = currentBubble.datum().time;
+      let bubbleWeek = d3.timeSunday.count(d3.timeYear(bubbleTime), bubbleTime);
+
+      // is bubble for point in time indicated by slider -> needs flag & is always visible
+      if (bubbleWeek === selectedWeek) {
+        currentBubble.style("fill", "url(#flag-z-" + country + ")");
+        currentBubble.style("stroke-width", 3);
+        currentBubble.attr("r", 12);
+        currentBubble.style("opacity", 1);
+        // if product value can deviate from actual, use pSBC library function to make color 30% lighter
+        currentBubble.style("stroke", function (d) { if(d.canDeviateFromActualValue){ return pSBC(0.3, getColorForCountry(country)); }else{ return getColorForCountry(country); } });
+        // count up number of visible bubbles for lines later
+        bubblesVisibleForCountry++;
+
+      // is before point in time indicated by slider -> is only to be shown when toggle indicates that Verlauf is to be shown
+      } else if(bubbleWeek < selectedWeek){
+        // show if toggle indicates that Verlauf is to be shown
+        if(toggle.checked) {
+          // make bubbles visible and set fill etc.
+          currentBubble.style("opacity", 1);
+          currentBubble.attr("r", 6);
+          currentBubble.style("stroke", "white");
+          currentBubble.style("stroke-width", 1);
+          // if product value can deviate from actual, use pSBC library function to make color 30% lighter
+          currentBubble.style("fill", function (d) {
+            if (d.canDeviateFromActualValue) {
+              return pSBC(0.3, getColorForCountry(country));
+            } else {
+              return getColorForCountry(country);
+            }
+          });
+          // count up number of visible bubbles for lines later
+          bubblesVisibleForCountry++;
+        // if toggle indicates that Verlauf is not to be shown
+        } else{
+          // make bubble invisible
+          currentBubble.style("opacity", 0);
+        }
+
+      // is after point in time indicated by slider -> never visible
+      } else {
+        currentBubble.style("opacity", 0);
+      }
+    });
+
+    // update lines visibility
+    // if toggle indicates that Verlauf is to be shown
+    if(toggle.checked){
+      // make lines before time indicated by slider visible, and the rest invisible
+        allLinesOfCountry.each(function (_, i) {
+          let currentLine = d3.select(this);
+          if(i < bubblesVisibleForCountry - 1) {
+            currentLine.style("opacity", 1);
+          }else{
+            currentLine.style("opacity", 0);
+          }
+        });
+    // if toggle indicates that Verlauf is not to be shown
+    } else {
+      // make all lines invisible
+      allLinesOfCountry.each(function (_, i) {
+        let currentLine = d3.select(this);
+        currentLine.style("opacity", 0);
+      });
+    }
+  }
+};
+
+
+function updateSpiderChart() {
+  let selectedWeek = d3.timeSunday.count(d3.timeYear(currentSliderValue), currentSliderValue);
+  let currentlyVisibleCountries = [];
+
+  countries2.forEach(c => {
+    if(getFilterConfigForCountry(c)) currentlyVisibleCountries.push(c)
+  });
+
+  let spiderplot = d3.select("#spider-chart svg");
+  let allPlots = spiderplot.selectAll(".spiderchart-plot");
+
+  allPlots.each(function (_, i) {
+    d3.select(this).attr("opacity", 0);
+  });
+
+  currentlyVisibleCountries.forEach(c => {
+    document.getElementById(c + "-" + selectedWeek).setAttribute("opacity", 1);
   });
 }

@@ -1,62 +1,45 @@
 var bubbleData = [];
 var globalBubbleX, globalBubbleY;
+var globalxAxis, globalyAxis;
+var globalAxisGrid, globalAxisGrid2;
 
 function drawBubbleChart(importedData){
 
-var margin = {top: 10, right: 20, bottom: 70, left: 70},
+var margin = {top: 0.0077 * window.innerHeight, right: 0.0078 * window.innerWidth, bottom: 0.0616 * window.innerHeight, left: 0.03125 * window.innerWidth},
     screenWidth = window.innerWidth,
     screenHeight = window.innerHeight,
     width = 0.66*screenWidth - margin.left - margin.right,
     height = 0.6*screenHeight - margin.top - margin.bottom;
     innerwidth = width - margin.left -margin.right;
-    innerheight = height - margin.top + 10;
+    innerheight = height;
 
     var svg = d3.select("#bubble-chart")
         .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
+        .attr("width", 0.66*screenWidth)
+        .attr("height", 0.6*screenHeight)
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
 
+
     //Hintergrund
-    var background= svg.append("rect")
+    svg.append("rect")
         .attr("id","backgroundRect")
-        .attr("width","94.4%")
-        .attr("height","90.1%")
+        .attr("width", width)
+        .attr("height",height)
         .attr("x",0)
         .attr("y",0)
-        .attr("fill","#FFFFFF")
-
-
-
-    // Daten
-    /*
-    var data = [{x:20, y:700, z: 10, c: "Deutschland"}, {x:90, y:350, z: 10, c: "Italien"}, {x:52, y:140, z: 10, c: "USA"},
-        {x:50, y:535, z: 10,  c: "China"}, {x:80, y:835, z: 10,  c: "Australien"}, {x:90, y:635, z: 10,  c: "Österreich"}, {x:20, y:435, z: 10,  c: "Russland"},
-        {x:15, y:335, z: 10,  c: "Südafrika"}, {x:150, y:125, z: 10,  c: "Brasilien"}];
-    */
-
-   //let data = [{x:10, y:100}, {x:15, y:300}, {x:35, y:540}, {x:50, y:260}, {x:76, y:410}, {x:99, y:670},
-    //{x:120, y:710}, {x:130, y:840}, {x:144, y:700}, {x:180, y:970}, {x:203, y:810}];
-
-    // OLD - RANDOM DATA GENERATION FOR DUMMY DATA
-    /*var data = [];
-
-    for(var i = 0; i < weeks.length; i++) {
-        data.push({x: i*3, y: Math.random() * 200, time: weeks[i]})
-    }*/
+        .attr("fill","#FFFFFF");
 
     // give global access to our data
     // Data Structure: {productvalueAverage: Durchschnitt Produkt-Werte, time: Zeitstempel Mittwoch, KW: Kalenderwoche "KWX", incidencevalue: Inzidenzwert}
     bubbleData = importedData;
-    //bubbleData = data;
 
     // x-Achse
     var x = d3.scaleLinear()
         .domain([0, 571])
         .range([ 0, width ]);
-    svg.append("g")
+    var xAxis = svg.append("g")
         .attr("transform", "translate(0," + height + ")") //Axe unten
         .attr("class", "axisGray")
         .call(d3.axisBottom(x));
@@ -64,10 +47,10 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
     // x-Achse Label:
     svg.append("text")
         .attr("text-anchor", "end")
-        .attr("x", width - 500)
-        .attr("y", height + margin.top + 40)
+        .attr("x", 0.52 * width)
+        .attr("y", height + margin.top + (0.03 * screenHeight))
         .attr("font-weight", "bold")
-        .attr("font-size", "12px")
+        .attr("font-size", "0.75rem")
         .attr("fill", "gray")
         .attr("font-family", "sans-serif")
         .text("7-Tage-Inzidenz-Wert");
@@ -76,7 +59,7 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
     var y = d3.scaleLinear()
         .domain([0, 100])
         .range([ height, 0]);
-    svg.append("g")
+    var yAxis = svg.append("g")
         .attr("class", "axisGray")
         .call(d3.axisLeft(y));
 
@@ -84,17 +67,20 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
     svg.append("text")
         .attr("text-anchor", "end")
         .attr("transform", "rotate(-90)")
-        .attr("y", -margin.left+20)
-        .attr("x", -margin.top-160)
+        .attr("y", -margin.left + 0.01*screenWidth)
+        .attr("x", -margin.top - 0.12364*screenHeight)
         .attr("font-weight", "bold")
-        .attr("font-size", "12px")
+        .attr("font-size", "0.75rem")
         .attr("fill", "gray")
         .attr("font-family", "sans-serif")
-        .text("Konsum (pro Kopf)")
+        .text("Nichtverfügbarkeit von Produkten im Online-Handel in %")
 
     // share bubble axes globally
     globalBubbleX = x;
     globalBubbleY = y;
+
+    globalxAxis = xAxis;
+    globalyAxis = yAxis;
       
     //Grid
     var xAxisGrid = d3.axisBottom(x)
@@ -102,7 +88,7 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
         .tickFormat('')
         .ticks(10);
 
-    svg.append('g')
+    var xAxisGrid2 = svg.append('g')
         .attr('class', 'x axis-grid')
         .attr('transform', 'translate(0,' + innerheight + ')')
         .call(xAxisGrid);
@@ -115,48 +101,11 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
         }
     });
 
-    //Bubble-Göße
-    /*
-    var z = d3.scaleLinear()
-        .domain([0, 50])
-        .range([ 0, 60]);*/
+    globalAxisGrid = xAxisGrid;
+    globalAxisGrid2 = xAxisGrid2;
 
-    //Hover Funktion, um Name des Landes sehen zu können
-    var tooltip = d3.select("#bubble-chart")
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "black")
-        .style("border-radius", "5px")
-        .style("padding", "10px")
-        .style("color", "white");
 
-    var showTooltip = function(d) {
-        tooltip
-            .transition()
-            .duration(50)
-        tooltip
-            .style("opacity", 1)
-            .html("Inzidenzwert: " + d.incidencevalue + "<br />" + "Konsumwert: " + d.productvalueAverage)
-            .style("position", "absolute")
-            .style("left", (d.screenX + 60) + "px")
-            .style("top", (d.screenY + 60) + "px")
-    }
-
-    var moveTooltip = function(d) {
-        tooltip
-            .style("position", "absolute")
-            .style("left", (d.screenX + 60) + "px")
-            .style("top", (d.screenY + 60) + "px")
-    }
-    
-    var hideTooltip = function(d) {
-        tooltip
-            .transition()
-            .style("opacity", 0)
-    }
-
-    // verlaufslinie zeichnen
+    // verlaufslinien und bubbles zeichnen
     drawBubblesAndLineForCountryAndCountryData("deutschland", bubbleData.deutschland);
     drawBubblesAndLineForCountryAndCountryData("österreich", bubbleData.österreich);
     drawBubblesAndLineForCountryAndCountryData("brasilien", bubbleData.brazilien);
@@ -226,14 +175,13 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
             .attr("cx", function (d) { return x(d.incidencevalue); })
             .attr("cy", function (d) { return y(d.productvalueAverage); })
             .attr("r", 6)
-            //.style("fill", function (d) { return c(d.c); } )
-            .style("fill", getColorForCountry(country))
-            //.style("opacity", "0.7")
             .attr("stroke", "white")
             .style("stroke-width", "1px")
-            .on("mouseover", showTooltip)
-            .on("mousemove", moveTooltip)
-            .on("mouseleave", hideTooltip);
+            // wenn Wert abweichen kann, benutze pSBC library-Funktion, um Farbe um 30% heller zu machen
+            .style("fill", function (d) { if(d.canDeviateFromActualValue){ return pSBC(0.3, getColorForCountry(country)); }else{ return getColorForCountry(country); } })
+            .on("mouseover", showtooltip)
+            .on("mouseleave", hidetooltip);
+
     }
 
     function hideAllBubblesExceptTheLastForCountryAndData(country, countryData) {
@@ -248,7 +196,10 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
             if (currentBubbleWeek == 1) {
                 currentBubble.style("opacity", 1);
                 currentBubble.style("fill", "url(#flag-" + country + ")");
+                currentBubble.style("stroke-width", 3);
                 currentBubble.attr("r", 12);
+                // wenn Wert abweichen kann, benutze pSBC library-Funktion, um Farbe um 30% heller zu machen
+                currentBubble.style("stroke", function (d) { if(d.canDeviateFromActualValue){ return pSBC(0.3, getColorForCountry(country)); }else{ return getColorForCountry(country); } });
             }
             if (currentBubbleWeek > 1) {
                 currentBubble.style("opacity", 0);
@@ -256,8 +207,4 @@ var margin = {top: 10, right: 20, bottom: 70, left: 70},
             }
         });
     }
-}
-
-function triggerBubbleChartChangeAndDrawLines() {
-    // TODO for playbutton
 }

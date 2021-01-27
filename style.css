@@ -103,8 +103,15 @@ p.data-sources {
     width: 100%;
     height: 100%;
     background-color: #eeeeee;
-    /*background-image: url('cat.png');*/
 }
+
+#zoom-bubble-chart {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+}
+
 /* Slider - außenrum (Slider Styling in slider.css Datei) */
 #slider-wrapper {
     margin: 0 1rem 1rem 1rem;
@@ -144,11 +151,14 @@ p.data-sources {
 #spider-wrapper {
     flex: 5;
     flex-shrink: 0;
-    height: 50vh;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
 }
 
 #placeholder {
-    height: 100%;
+    width: 100%;
+    flex: 9;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -212,6 +222,10 @@ p.data-sources {
 .toggle-label-text {
     margin-left: 1rem;
     color: var(--text-gray);
+}
+
+.toggle-label-text:hover {
+    color: var(--main-accent-color);
 }
 
 .toggle {
@@ -323,4 +337,60 @@ p.data-sources {
     cursor: pointer;
 }
 
-/* Slider */
+.tooltip {
+    background: var(--text-black);
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+#tooltip-text {
+    margin: 0;
+}
+
+#tooltip-info {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.8rem;
+}
+
+#tooltip-info i {
+    margin: 0.5rem 0.5rem 0 0;
+    font-size: 1.8rem;
+}
+
+#tooltip-info p {
+    margin-bottom: 0;
+}
+
+/* Zoom Toggle */
+
+div#zoom-toggle {
+    isolation: isolate;
+    position: relative;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 1rem;
+}
+
+.zoom-toggle-indicator {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    justify-items: stretch;
+    flex-direction: column;
+}
+
+#zoom-toggle-wrapper:hover {
+    color: var(--main-accent-color);
+}
+
+#zoom-toggle-wrapper {
+    color: var(--text-gray);
+}
+
+div#zoom-toggle i {
+    text-align: center;
+}
+
