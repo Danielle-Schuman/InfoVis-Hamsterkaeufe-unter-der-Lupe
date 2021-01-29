@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <!-- distributed stylesheets for a clear arrangement -->
+        <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="stylesheet" type="text/css" href="spider-style.css" />
+        <link rel="stylesheet" type="text/css" href="bubble-style.css" />
+        <link rel="stylesheet" type="text/css" href="filter-style.css" />
+        <link rel="stylesheet" type="text/css" href="slider-style.css" />
+        <!-- for material icons use -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+        <link href="https://fonts.googleapis.com/css2?family=Material+Icons+Outlined"
+              rel="stylesheet">
+        <title>IV - Hamsterkäufe unter der Lupe - Gruppe 4</title>
+	    <meta charset="UTF-8">
+        <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    </head>
+    <body>
+        <div id="header">
+            <div id="title-container">
+                <!--<h1>Hamsterkäufe unter der Lupe</h1>-->
+                <img src="hamsterkauf.svg" />
+            </div>
+            <div id="creators-container">
+                <p>Gruppe 4 - Daniëlle Schuman, Anahita Marashi, Elizabeth Bouquet, Alexandra Ginger</p>
+                <p class="data-sources">Quelle für die Inzidenzwerte: https://ourworldindata.org/coronavirus-source-data</p>
+                <p class="data-sources">Quelle für die Konsumwerte: https://www.euromonitor.com/coronavirus</p>
+            </div>
+            <div id="legend">
+                <div id="legend-deutschland" class="legend"></div>
+                <div id="legend-österreich" class="legend"></div>
+                <div id="legend-russland" class="legend"></div>
+                <div id="legend-china" class="legend"></div>
+                <div id="legend-brasilien" class="legend"></div>
+                <div id="legend-südafrika" class="legend"></div>
+                <div id="legend-usa" class="legend"></div>
+                <div id="legend-australien" class="legend"></div>
+            </div>
+        </div>
+        <div id="content">
+            <div id="left-container">
+                <div id="bubble-wrapper">
+                    <div id="tooltip" class="tooltip" display="none" style="position: absolute; display: none;">
+                        <p id="tooltip-text"></p>
+                        <div id="tooltip-info"><i class="material-icons">info_outline</i><p>Fehlende Werte wurden hier durch Annäherungswerte ergänzt.</p></div>
+                    </div>
+                    <div id="bubble-chart">
+                        <div id="zoom-in-overlay">
+                            <i class="material-icons">zoom_in</i>
+                        </div>
+                        <!-- bubble chart will be drawn here :) -->
+                    </div>
+
+                    <div id="zoom-bubble-chart">
+                        <div id="zoom-out-overlay">
+                            <i class="material-icons">zoom_out</i>
+                        </div>
+                        <!-- zoomed bubble chart will be drawn here :) -->
+                    </div>
+
+                </div>
+                <div id="slider-wrapper">
+                    <div id="slider-toolbar">
+                        <!-- slider toggle and play button here :) -->
+                        <button id="play-button" onclick="onPlayButtonClicked(this)"> 
+                            <!--<i class="material-icons">play_arrow</i>-->
+                        </button>
+                        <!-- filter toggle here :) -->
+                        <label id="zoom-toggle-wrapper" class="toggle-label" onmouseenter="onZoomToggleHover(this,true)" onmousemove="onZoomToggleHover(this,true)" onmouseout="onZoomToggleHover(this,false)">
+                            <div id="zoom-toggle" class="toggle">
+                                <input id="zoom-toggle-input" class="toggle-state" type="checkbox" name="check" value="check" onclick="onZoomToggleClicked(this)"/>
+                                <div class="zoom-toggle-indicator"><i id="zoom-icon" class="material-icons">zoom_in</i></div>
+                            </div>
+                            <div id="zoom-toggle-label" class="toggle-label-text">Ansicht vergrößern</div>
+                        </label>
+                        <label class="toggle-label">
+                            <div id="slider-toggle" class="toggle">
+                                <input id="slider-toggle-input" class="toggle-state" type="checkbox" name="check" value="check" checked onclick="onSliderToggleClicked(this)"/>
+                                <div class="toggle-indicator"></div>
+                            </div>
+                            <div id="progress-toggle-label" class="toggle-label-text">Verlauf ausblenden</div>
+                        </label>
+                    </div>
+                    <div id="slider">
+                    <!-- slider here :) -->
+                        <div id="value-wrapper"><p id="value-time"></p></div>
+                        <div id="slider-wrapper"><div id="slider-time"></div></div>
+                    </div>
+                </div>
+            </div>
+            <div id="right-container">
+                <div id="spider-title">
+                    <h3>Nichtverfügbarkeit von ausgewählten Produkten im Online-Handel in %</h3>
+                </div>
+                <div id="spider-container">
+                    <div id="spider-wrapper">
+                        <div id="spider-chart">
+                            <!-- spider chart will be drawn here :) -->
+                        </div>
+                        <!-- the following structure is our placeholder for the spider chart -->
+                        <div id="placeholder">
+                            <div id="icon">
+                                <i class="material-icons">info_outline</i>
+                            </div>
+                            <div id="placeholder-text">
+                                <p>Wählen Sie Länder aus,
+                                    um mehr Details zu erfahren.</p>
+                            </div>
+                        </div>
+                        <!-- placeholder end -->
+                    </div>
+                    <!--<div id="spider-info">
+                        <i class="material-icons">info_outline</i>
+                        <p>
+                            Durchschnittlicher Inzidenzwert des ausgewählten Zeitraums: 
+                        </p>
+                        <p>X</p>
+                    </div>-->
+                </div>
+                <div id="filter-container">
+                    <div id="filter-header">
+                        <!-- insert filter toggle here :) -->
+                        <!--<label class="toggle-label">
+                            <div id="filter-toggle" class="toggle">
+                                <input class="toggle-state" type="checkbox" name="check" value="check" onclick="onFilterToggleClicked(this)" />
+                                <div class="toggle-indicator"></div>
+                            </div>
+                            <div class="toggle-label-text">Filter zurücksetzen</div>
+                        </label>-->
+                        <input id="filter-button" type="button" class="button" value="" onclick="onFilterToggleClicked(this)">
+                    </div>
+                    <div id="filter-wrapper">
+                        <!--checkboxes here :) -->
+                        <div id="filter-deutschland" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-deutschland" name="deutschland">
+                            <label for="deutschland">Deutschland</label>
+                        </div>
+                        <div id="filter-china" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-china" name="china">
+                            <label for="china">China</label>
+                        </div>
+                        <div id="filter-usa" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-usa" name="usa">
+                            <label for="usa">USA</label>
+                        </div>
+                        <div id="filter-österreich" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-österreich" name="österreich">
+                            <label for="österreich">Österreich</label>
+                        </div>
+                        <div id="filter-brasilien" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-brasilien" name="brasilien">
+                            <label for="brasilien">Brasilien</label>
+                        </div>
+                        <div id="filter-australien" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-australien" name="australien">
+                            <label for="australien">Australien</label>
+                        </div>
+                        <div id="filter-russland" class="filter" style="order:1;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-russland" name="russland">
+                            <label for="russland">Russland</label>
+                        </div>
+                        <div id="filter-südafrika" class="filter" style="order:2;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-südafrika" name="südafrika">
+                            <label for="südafrika">Südafrika</label>
+                        </div>
+                        <div id="filter-italien" class="filter" style="order:3;" onclick="onCheckboxClicked(this)">
+                            <input type="checkbox" id="check-italien" name="italien">
+                            <label for="italien">Italien</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <!-- D3 library -->
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <!-- distributed logic for the charts and the main interaction functionality -->
+    <script src="https://unpkg.com/d3-simple-slider"></script>
+    <!-- import library code for making colors lighter -->
+    <script src="PJs-master/pSBC.js"></script>
+    <!-- file for importing data from csv -->
+    <script src="dataImport.js"></script>
+    <!-- visualization files and main -->
+    <script src="spiderchart.js"></script>
+    <script src="bubblechart.js"></script>
+    <script src="zoomChart.js"></script>
+    <script src="slider.js"></script>
+    <script src="main.js"></script>
+</html>

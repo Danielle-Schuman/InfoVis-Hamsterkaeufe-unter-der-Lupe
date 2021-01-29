@@ -1,0 +1,76 @@
+body {
+    background-color: #eeeeee
+}
+
+/*Axis*/
+.axisGray line{
+    stroke: #777777;
+}
+
+.axisGray path{
+    stroke: #777777;
+}
+
+.axis-grid path {
+    display: none;
+}
+
+.axisGray text{
+    fill: #777777;
+}
+
+/*BUBBLES*/
+
+.bubbles {
+    stroke-width: 2px;
+    stroke: white;
+}
+.bubbles:hover {
+    stroke: black;
+}
+
+.axis-grid line {
+    stroke: gray;
+    stroke-dasharray: 5,5;
+}
+
+/* zoom overlays */
+#bubble-chart #zoom-in-overlay {
+    background-color: rgba(153, 237, 131, 0.2);
+    opacity: 0;
+    border: 2px solid var(--slider-green);
+    color: var(--slider-green);
+    position: absolute;
+    left: 4vw;
+    top: calc(100px + 28.5vh);
+    width: 22vw;
+    height: 27vh;
+    z-index: 100;
+    justify-content: center;
+    display: flex;
+}
+
+#zoom-in-overlay i {
+    margin: auto;
+    font-size: 6rem;
+}
+
+#zoom-bubble-chart #zoom-out-overlay {
+    background-color: rgba(153, 237, 131, 0.2);
+    opacity: 0;
+    border: 2px solid var(--slider-green);
+    color: var(--slider-green);
+    position: absolute;
+    left: 4vw;
+    top: calc(100px + 2.5vh);
+    width: 62vw;
+    height: 53vh;
+    z-index: 100;
+    justify-content: center;
+    display: flex;
+}
+
+#zoom-out-overlay i {
+    margin: auto;
+    font-size: 6rem;
+}

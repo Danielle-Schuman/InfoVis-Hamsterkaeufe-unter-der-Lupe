@@ -1,0 +1,396 @@
+/* Farbschema als globale Variablen */
+:root {
+    --main-bg-color: #eeeeee;
+    --main-accent-color: #6E4EDC;
+    --slider-green: #99ed83;
+    --slider-blue: #4b9cbc;
+    --checkbox-hover: #fba3c1;
+    --checkbox-selected: #d21460;
+    --checkbox-selected-hover: #780030;
+    --text-black: #333333;
+    --text-gray: #777777;
+    --text-light-gray: #9b9b9b;
+    --box-light-shading: #ffffff;
+    --box-light-shading-opacity: 1;
+    --box-dark-shading: #000000;
+    --box-dark-shading-opacity: 0.26;
+  }
+
+/* Globale Einstellungen */
+* {
+    box-sizing: border-box;
+}
+
+iframe {
+    width: 100%;
+    height: 100%;
+}
+
+html {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: var(--main-bg-color);
+    margin: 0;
+    padding: 0;
+    color: var(--text-black);
+}
+/* oberer Teil */
+#header {
+    flex: 1;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    display: flex;
+}
+
+#title-container {
+    font-weight: bold;
+    color: white;
+    background-color: var(--main-accent-color);
+    flex: 1;
+    border-radius:  0 0 9rem 0;
+}
+
+#title-container h1 {
+    margin: 0;
+}
+
+#title-container img {
+    width: 75%;
+    margin: 10px 0 5px 1rem;
+}
+
+#creators-container {
+    font-style: italic;
+    flex: 2;
+    padding: 10px 20px;
+}
+
+p.data-sources {
+    font-size: 0.8rem;
+    margin: 0;
+    font-style: italic;
+    color: var(--text-gray);
+}
+
+/* Unterer Teil */
+#content {
+    flex: 10;
+    display: flex;
+    flex-direction: row;
+}
+
+/* linker Bereich */
+#left-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+/* Bubble Chart - außenrum (alles zum Bubble Chart selber in bubble-style.css) */
+#bubble-wrapper {
+    flex: 2;
+    padding: 1rem;
+}
+
+#bubble-chart {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+}
+
+#zoom-bubble-chart {
+    background-color: white;
+    width: 100%;
+    height: 100%;
+    background-color: #eeeeee;
+}
+
+/* Slider - außenrum (Slider Styling in slider.css Datei) */
+#slider-wrapper {
+    margin: 0 1rem 1rem 1rem;
+    flex: 1;
+}
+
+#slider-toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+/* rechter Bereich */
+#right-container {
+    flex: 1;
+    padding: 1rem 0 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Spider Chart - außenrum (alles zum Spider Chart selbst in spider-style.css) */
+#spider-container {
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    min-height: 50vh;
+}
+
+#spider-title h3 {
+    margin: 0;
+    padding: 5px;
+}
+
+#spider-wrapper {
+    flex: 5;
+    flex-shrink: 0;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+}
+
+#placeholder {
+    width: 100%;
+    flex: 9;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-light-gray);
+    padding: 8rem 2rem 0 2rem;
+    text-align: center;
+}
+
+#placeholder #icon i {
+    font-size: 8rem;
+}
+
+#placeholder-text {
+    flex: 1;
+}
+
+#spider-info {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    padding-top: 5px;
+}
+
+#spider-info p {
+    font-size: 0.8rem;
+    margin: 0;
+    padding-left: 0.5rem;
+    line-height: 1.2rem;
+}
+
+/* Filter Container */
+#filter-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    border-radius: 1.3rem 0 0 1.3rem;
+    border: 4px solid var(--main-accent-color);
+    border-right: 0;
+    padding: 1.1rem;
+    box-shadow: 0 0 1rem var(--text-gray);
+}
+
+/* Toggle */
+
+#filter-header {
+    margin: 0;
+    padding-bottom: 5px;
+    flex: 1;
+    border-bottom: 1px solid var(--text-light-gray);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.toggle-label {
+    display: inline-flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.toggle-label-text {
+    margin-left: 1rem;
+    color: var(--text-gray);
+}
+
+.toggle-label-text:hover {
+    color: var(--main-accent-color);
+}
+
+.toggle {
+    isolation: isolate;
+    position: relative;
+    height: 2rem;
+    width: 4rem;
+    background-color: white;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow:
+            /*Hinterer Schatten vom Toggle selbst*/
+            -8px -4px 8px 0px white,
+            8px 4px 12px 0px #E0E0E0 ,
+            /*Schatten im toggle*/
+            4px 4px 4px 0px #E0E0E0   inset,
+            -4px -4px 4px 0px white inset;
+}
+
+.toggle-state {
+    display: none;
+}
+
+
+/*toggle Kreis*/
+.toggle-indicator {
+    height: 100%;
+    width: 200%;
+    background: var(--text-light-gray);
+    border-radius: 1rem;
+    transform: translate3d(-75%, 0, 0);
+    transition: transform 0.4s cubic-bezier(0.85, 0.05, 0.18, 1.35);
+    box-shadow:
+            -8px -4px 8px 0px #E0E0E0 ,
+            8px 4px 12px 0px #E0E0E0 ;
+}
+
+
+
+
+.toggle-state:checked ~ .toggle-indicator {
+    transform: translate3d(25%, 0, 0);
+}
+
+.toggle-state:checked ~ .toggle-indicator{
+    background: var(--main-accent-color);
+}
+
+
+.toggle-state:checked ~ .toggle{
+    background: #D8D0F2;
+}
+
+/* playbutton */
+#play-button {
+    background-image: url('playbutton/playbutton_unchecked.svg');
+    background-size: cover;
+    border: none;
+    text-decoration: none;
+    width: 4.2rem;
+    height: 4.2rem;
+}
+
+#play-button:hover {
+    background-image: url('playbutton/playbutton_unchecked-hover.svg');
+}
+
+#play-button:before {
+    display: block;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    border: 1px solid var(--text-black);
+}
+
+#play-button i {
+    line-height: 1rem;
+    flex: 1;
+}
+
+#play-button.active {
+    background-image: url('playbutton/playbutton_checked.svg');
+}
+
+#play-button.active:hover {
+    background-image: url('playbutton/playbutton_checked-hover.svg');
+}
+
+/* filter button */
+#filter-button {
+    background-image: url('filterbutton/filterButton_disabled.svg');
+    background-size: cover;
+    border: none;
+    text-decoration: none;
+    width: 9rem;
+    height: 3rem;
+    cursor: not-allowed;
+}
+
+#filter-button.enabled {
+    background-image: url('filterbutton/filterButton_enabled.svg');
+    cursor: pointer;
+}
+
+#play-button.enabled:hover {
+    background-image: url('filterbutton/filterButton_hover.svg');
+    cursor: pointer;
+}
+
+.tooltip {
+    background: var(--text-black);
+    color: white;
+    border-radius: 5px;
+    padding: 10px;
+  }
+
+#tooltip-text {
+    margin: 0;
+}
+
+#tooltip-info {
+    display: flex;
+    flex-direction: row;
+    font-size: 0.8rem;
+}
+
+#tooltip-info i {
+    margin: 0.5rem 0.5rem 0 0;
+    font-size: 1.8rem;
+}
+
+#tooltip-info p {
+    margin-bottom: 0;
+}
+
+/* Zoom Toggle */
+
+div#zoom-toggle {
+    isolation: isolate;
+    position: relative;
+    height: 2rem;
+    width: 2rem;
+    border-radius: 1rem;
+}
+
+.zoom-toggle-indicator {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    justify-items: stretch;
+    flex-direction: column;
+}
+
+#zoom-toggle-wrapper:hover {
+    color: var(--main-accent-color);
+}
+
+#zoom-toggle-wrapper {
+    color: var(--text-gray);
+}
+
+div#zoom-toggle i {
+    text-align: center;
+}
+
