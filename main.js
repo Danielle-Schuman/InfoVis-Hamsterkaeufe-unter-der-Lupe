@@ -224,9 +224,13 @@ function onZoomToggleHover(toggle, entering) {
     if (entering == true) {
         zoomInOverlay.style.opacity = 1;
         zoomOutOverlay.style.opacity = 1;
+        zoomInOverlay.style.display = 'flex';
+        zoomOutOverlay.style.display = 'flex';
     } else {
         zoomInOverlay.style.opacity = 0;
         zoomOutOverlay.style.opacity = 0;
+        zoomInOverlay.style.display = 'none';
+        zoomOutOverlay.style.display = 'none';
     }
 }
 
@@ -351,7 +355,7 @@ function showtooltip(d, i, nodes) {
     let tooltip = document.getElementById("tooltip");
     let tooltipText = document.getElementById("tooltip-text");
     let toolTipInfo = document.getElementById("tooltip-info");
-
+console.log("tooltip");
     // show only tooltip for visible bubbles
     if (d.target.style.opacity == 0) return;
 
@@ -365,7 +369,7 @@ function showtooltip(d, i, nodes) {
     let incidence = (Math.round(i.incidencevalue * 100) / 100).toFixed(2);
     let product = (Math.round(i.productvalueAverage * 100) / 100).toFixed(2);
 
-    tooltipText.innerHTML = "Inzidenzwert: " + incidence + "<br />" + "Konsumwert: " + product;
+    tooltipText.innerHTML = "Inzidenzwert: " + incidence + "<br />" + "Konsumwert: " + product + "%";
     tooltip.style.display = "block";
     tooltip.style.left = (d.screenX-60) + "px";
     tooltip.style.top = (d.screenY-60) + "px";
