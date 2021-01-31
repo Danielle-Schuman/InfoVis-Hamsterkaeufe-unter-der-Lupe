@@ -12,6 +12,7 @@ function drawZoomBubbleChart(importedData){
             .append("svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
+            .attr("style", "overflow: visible")
             .append("g")
             .attr("transform",
                 "translate(" + margin.left + "," + margin.top + ")");

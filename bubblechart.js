@@ -17,6 +17,7 @@ var margin = {top: 0.0077 * window.innerHeight, right: 0.0078 * window.innerWidt
         .append("svg")
         .attr("width", 0.66*screenWidth)
         .attr("height", 0.6*screenHeight)
+        .attr("style", "overflow: visible")
         .append("g")
         .attr("transform",
             "translate(" + margin.left + "," + margin.top + ")");
